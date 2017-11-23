@@ -4,6 +4,8 @@
 #pragma once //DO NOT ERASE (not sure what #pragma does yet - Jake)
 
 //Libraries
+#include "stdafx.h"
+#include <stdlib.h>
 #include <iostream>
 #include <fstream>
 #include <iomanip>
@@ -32,7 +34,7 @@ public:
 		//Introduces user to the program.
 		//Postcondition: A paragraph is produces explaining the program to the user.
 
-	void grabUsername(string&, string&);
+	void grabUsername();// string&, string&);
 		//Will prompt user for name (Pharmacist should/would be using program).
 		//Postcondition: The strings entered into the console by the user will be stored into the
 		//member variables username and password.
@@ -52,7 +54,7 @@ public:
 
 	
 
-private:
+
 	string username;
 	string password;
 };
