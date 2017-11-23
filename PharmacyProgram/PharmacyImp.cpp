@@ -14,6 +14,20 @@ Pharmacy::~Pharmacy()
 
 void Pharmacy::clearConsole()
 {
+	//Makes sure that the screen is not cleared immediately and program will wait until they press enter
+	cin.ignore(1, ' \n');
+
+	//variable that we cin to. Serves no purpose other than allowing us to cin and end the ignore statement,
+	//effectively clearing the screen.
+	char pointlessVar;
+
+	//Instructs user how to continue.
+	cout << "Press [enter] to continue." << endl;
+
+	//See pointlessVar comment above
+	cin.get(pointlessVar);
+	
+	//Clears the console
 	system("CLS");
 }
 
@@ -66,17 +80,18 @@ int Pharmacy::verifyCredentials(string username, string password)
 		if (compareCreds == username)
 		{
 			usernameYesOrNo = 1;
+			return 1;
 		}
 		else
 		{
 			usernameYesOrNo = 0;
-			return 0;
 		}
 	}
 	
 	//The file containing the verified usernames is closed.
 	usernameFile.close();
 
+	
 	//Opens the file containing verified password information
 	passwordFile.open(".\\UserInfo\\passwords.dat");
 
@@ -101,12 +116,12 @@ int Pharmacy::verifyCredentials(string username, string password)
 		else
 		{
 			passwordYesOrNo = 0;
-			return 0;
 		}
 	}
-
-
-	if (usernameYesOrNo + passwordYesOrNo == 2)
+	//The file containing the verified passwords is closed
+	passwordFile.close();
+	//If both the username and password are verified, then the function returns 1. Else 0.
+	if ((usernameYesOrNo + passwordYesOrNo) == 2)
 	{
 		return 1;
 	}
@@ -115,7 +130,9 @@ int Pharmacy::verifyCredentials(string username, string password)
 		return 0;
 	}
 
-
+	//The file containing the verified passwords is closed
+	passwordFile.close();
+	
 }
 
 void Pharmacy::viewStock()
