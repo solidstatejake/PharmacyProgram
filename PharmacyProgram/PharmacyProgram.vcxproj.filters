@@ -32,7 +32,7 @@
     <ClCompile Include="PharmacyProgram.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Pharmacy.cpp">
+    <ClCompile Include="PharmacyImp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
