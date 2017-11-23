@@ -40,11 +40,27 @@ void Pharmacy::introToUser()
 
 void Pharmacy::grabUsername()//string &username, string &password)
 {
+	char characterInput = ' ';
+
 	cout << "Please enter your username: ";
 	cin >> username;
 
 	cout << "Please enter your password: ";
-	cin >> password;
+	while (characterInput != 13)
+	{
+		characterInput = _getch();
+		if (characterInput == 8)
+		{
+			password.pop_back();
+			cout << "\b";					//STILL NEEDS TO BE REVIEWED. ASTERISKS WILL NOT GO AWAY AFTER TYPED
+		}
+		else
+		{
+			password.push_back(characterInput);
+			cout << '*';
+		}
+	}
+	
 
 }
 
@@ -60,6 +76,7 @@ int Pharmacy::verifyCredentials(string username, string password)
 	int usernameYesOrNo = 0,
 		passwordYesOrNo = 0;
 
+	
 	//Opens the file containing verified username information
 	usernameFile.open(".\\UserInfo\\usernames.dat");
 	

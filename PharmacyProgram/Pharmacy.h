@@ -6,6 +6,7 @@
 //Libraries
 #include "stdafx.h"
 #include <stdlib.h>
+#include <conio.h>
 #include <iostream>
 #include <fstream>
 #include <iomanip>
