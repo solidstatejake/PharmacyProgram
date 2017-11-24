@@ -60,8 +60,6 @@ void Pharmacy::grabUsername()//string &username, string &password)
 			cout << '*';
 		}
 	}
-	
-
 }
 
 int Pharmacy::verifyCredentials(string username, string password)
