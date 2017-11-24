@@ -41,7 +41,7 @@ public:
 		//member variables username and password.
 	
 	
-	int verifyCredentials() const;
+	int verifyCredentials();
 		//This function will check the credentials extracted from the console in the function 
 		//grabPharmacistName against the files that contain acceptable usernames and passwords.
 		//If the credentials are appropriate, the function will permit access to the further depths 

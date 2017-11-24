@@ -88,7 +88,7 @@ void Pharmacy::grabUsername()
 	cout << endl;
 }
 
-int Pharmacy::verifyCredentials() const
+int Pharmacy::verifyCredentials() 
 {
 
 	//cout << endl << username << password << endl << endl;
