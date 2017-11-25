@@ -31,10 +31,176 @@ void Pharmacy::clearConsole() const
 	system("CLS");
 }
 
+void Pharmacy::resetMedicationNames()
+{
+	ofstream namesFileOut;
+
+	namesFileOut.open(".\\PharmacyInformation\\MedicationNames.dat");
+
+	if (namesFileOut.fail())
+	{
+		cout << "Error opening names file in order to reset data inside." << endl;
+	}
+
+	for (int i = 1; i <= 200; i++)
+	{
+		namesFileOut << "MEDICATION" << i << endl; 
+	}
+
+	namesFileOut.close();
+}
+
+void Pharmacy::resetStock()
+{
+	//define the output variable stockFileOut
+	ofstream stockFileOut;
+
+	//Open the stock file
+	stockFileOut.open(".\\PharmacyInformation\\MedicationStock.dat");
+
+
+	if (stockFileOut.fail())
+	{
+		cout << "Error opening stock file in order to reset data inside." << endl;
+	}
+
+	for (int i = 0; i < 200; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			stockFileOut << setw(15) << left << 1000;
+
+			if (j == 2)
+			{
+				stockFileOut << endl;
+			}//end of if
+		}//end of j for
+	}//end of i for
+
+	//Close the stock file
+	stockFileOut.close();
+}
+
+void Pharmacy::resetMedicationDosages()
+{
+	//define the output variable stockfile
+	ofstream dosageFileOut;
+
+	//Open the stock file
+	dosageFileOut.open(".\\PharmacyInformation\\MedicationDosages.dat");
+
+
+	if (dosageFileOut.fail())
+	{
+		cout << "Error opening dosages file in order to reset data inside." << endl;
+	}
+
+	for (int i = 0; i < 200; i++)
+	{
+			dosageFileOut << setw(15) << left;
+			
+			switch (i % 10)
+			{
+			case 0:
+				dosageFileOut << 10 << setw(15) << left << 20 << 30 << endl;
+				break;
+			case 1:
+				dosageFileOut << 25 << setw(15) << left << 50 << 75 << endl;
+				break;
+			case 2:
+				dosageFileOut << 12.5 << setw(15) << left << 25 << 40 << endl;
+				break;
+			case 3: 
+				dosageFileOut << 0.5 << setw(15) << left << 1.0 << 2.0 << endl;
+				break;
+			case 4:
+				dosageFileOut << 5 << setw(15) << left << 10 << 20 << endl;
+				break;
+			case 5: 
+				dosageFileOut << 1 << setw(15) << left << 2 << 3 << endl;
+				break;
+			case 6:
+				dosageFileOut << 100 << setw(15) << left << 500 << 1000 << endl;
+				break;
+			case 7:
+				dosageFileOut << 50 << setw(15) << left << 100 << 250 << endl;
+				break;
+			case 8:
+				dosageFileOut << 7.5 << setw(15) << left << 15 << 30 << endl;
+				break;
+			case 9:
+				dosageFileOut << 500 << setw(15) << left << 1000 << 2000 << endl;
+				break;
+			}
+		}//end of i for
+
+	//Close the costs file
+	dosageFileOut.close();
+}
+
+void Pharmacy::resetMedicationCosts()
+{
+
+	//define the output variable stockfile
+	ofstream costsFileOut;
+
+	//Open the stock file
+	costsFileOut.open(".\\PharmacyInformation\\MedicationCosts.dat");
+
+
+	if (costsFileOut.fail())
+	{
+		cout << "Error opening costs file in order to reset data inside." << endl;
+	}
+
+	for (int i = 0; i < 200; i++)
+	{
+		costsFileOut << setw(15) << left;
+
+		switch (i % 10)
+		{
+		case 0:
+			costsFileOut << 1.50 << setw(15) << left << 2.50 << 3.50 << endl;
+			break;
+		case 1:
+			costsFileOut << 3.75 << setw(15) << left << 5.00 << 8.00 << endl;
+			break;
+		case 2:
+			costsFileOut << 1.25 << setw(15) << left << 2.40 << 4.20 << endl;
+			break;
+		case 3:
+			costsFileOut << .25 << setw(15) << left << .45 << .80 << endl;
+			break;
+		case 4:
+			costsFileOut << 15 << setw(15) << left << 28.80 << 42.88<< endl;
+			break;
+		case 5:
+			costsFileOut << 1.89 << setw(15) << left << 2.99 << 4.00 << endl;
+			break;
+		case 6:
+			costsFileOut << 105 << setw(15) << left << 520 << 990 << endl;
+			break;
+		case 7:
+			costsFileOut << 3.30 << setw(15) << left << 6.25 << 7.00 << endl;
+			break;
+		case 8:
+			costsFileOut << 1.20 << setw(15) << left << 2.00 << 3.75 << endl;
+			break;
+		case 9:
+			costsFileOut << 5.50 << setw(15) << left << 10.20 << 18.59 << endl;
+			break;
+		}
+	}//end of i for
+
+	 //Close the costs file
+	costsFileOut.close();
+}
 
 void Pharmacy::introToUser() const
 {
 	cout << "PharmaTech Version 1.0" << endl;
+
+	//write some more shit that explains to a pharmacist how to fill a prescription.
 }
 
 

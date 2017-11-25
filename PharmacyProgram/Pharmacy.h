@@ -61,6 +61,13 @@ public:
 
 	void displayReceipts();
 
+
+	void resetStock();
+	void resetMedicationNames();
+	void resetMedicationCosts();
+	void resetMedicationDosages();
+
+
 	string username;
 	string password;
 
