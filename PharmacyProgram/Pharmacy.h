@@ -75,12 +75,16 @@ private:
 	int prescriptionLength; //Variable represents the length of time the prescription will last
 	int prescriptionDosage;
 	int dosageFrequency;
+	int amountOfPillsToMakeUpScript; //Variable used to combine the three above variables; this will make it easier to create algorithms; working with one variable instead of three.
 	double costEffectiveSolution;
-
 	//These three variables will be used to pull in the three dosages corresponding to a specific medication. The most cost effective dosage combo will then be presented to user and the user can chose.
-	double dosage1;
-	double dosage2;
-	double dosage3;
+	int dosage1;
+	int dosage2;
+	int dosage3;
+
+	int pill1; //Represents the amount of the first dosage of the medication it will take to fill the prescription.
+	int pill2; //Represents the amount of the second dosage of the medication it will take to fill the prescription.
+	int pill3; //Represents the amount of the third dosage of the medication it will take to fill the prescription.
 
 	//These three variables wil be used to pull in the three dosage pricesd corresponding to a specific medication designated by the user. 
 	double cost1;
@@ -88,6 +92,9 @@ private:
 	double cost3;
 
 	//These three variables will be used to pull in the three dosage's stock information corresponding to a specific medication designated by the user.
+	int stock1;
+	int stock2;
+	int stock3;
 
 };
 
