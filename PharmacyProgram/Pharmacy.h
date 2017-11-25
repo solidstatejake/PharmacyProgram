@@ -77,6 +77,7 @@ private:
 	int dosageFrequency;
 	int amountOfPillsToMakeUpScript; //Variable used to combine the three above variables; this will make it easier to create algorithms; working with one variable instead of three.
 	double costEffectiveSolution;
+
 	//These three variables will be used to pull in the three dosages corresponding to a specific medication. The most cost effective dosage combo will then be presented to user and the user can chose.
 	int dosage1;
 	int dosage2;
@@ -95,7 +96,7 @@ private:
 	int stock1;
 	int stock2;
 	int stock3;
-
+	int stockArray[200][3];
 };
 
 

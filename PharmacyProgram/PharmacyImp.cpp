@@ -232,7 +232,7 @@ void Pharmacy::fillPrescription()
 {
 	int count = 0;
 	ifstream  namesFileIn, costsFileIn, dosagesFileIn, stockFileIn;
-	ofstream stockFileOut;
+	fstream stockFileOut;
 	string carryName;
 
 	int whichCostEffectiveMethod = 0;
@@ -454,7 +454,7 @@ void Pharmacy::fillPrescription()
 	
 	//_______________________________________________________Update stock_______________________________________________________________________________//
 	
-	//The file containing the quantities of each medication in stock is presented.
+	//The file containing the quantities of each medication in stock is opened.>>INPUT<<
 	stockFileIn.open(".\\PharmacyInformation\\MedicationStock.dat");
 
 	//If the file containing medication stock cannot be opened, an error message is displayed.
@@ -463,18 +463,71 @@ void Pharmacy::fillPrescription()
 		cout << "Error opening file containing medication in stock." << endl;
 	}
 
-	//While not at the end of the while, search for the row that contains all the information about specific medication. Once at that row, grab1 >> grab2 >> grab3.
-	while (!stockFileIn.eof())
+	//This for loop will pull the entire sequential data file containing the medication stock into
+	//an array. This array can then be edited and then written back into the sequential data file.
+	for (int i = 0; i < 200; i++)
 	{
-		int count = 0;
-		if (count == medicationRow)
+		for (int j = 0; j < 3; j++)
 		{
-			stockFileIn >> stock1 >> stock2 >> stock3;
+			stockFileIn >> stockArray[i][j];
 		}
-		count++;
-	}//end of while
+	}
 
+	//The file containing the quantities of each medication in stock is closed. >>INPUT<<
 	stockFileIn.close();
+
+	//This sequence of for loops and if statements will update the specific row containing the medication	
+	//stock information.
+	for (int i = 0; i < 200; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			if (i == medicationRow)
+			{
+				for (int k = 0; k < 3; k++)
+				{
+					if (k == 0)
+					{
+						stockArray[i][k] = (stock1 - pill1);
+					}
+					else if (k == 1)
+					{
+						stockArray[i][k] = (stock2 - pill2);
+					}
+					else if (k == 2)
+					{
+						stockArray[i][k] = (stock3 - pill3);
+					}//end of if...else
+				}//end of k for
+			}//end of if
+		}//end of j for
+	}//end of i for
+
+
+	//The file containing the quantities of each medication in stock is opened. <<OUTPUT>>
+	stockFileOut.open(".\\PharmacyInformation\\MedicationStock.dat");
+
+	//If the file containing medication stock cannot be opened, an error message is displayed.
+	if (stockFileOut.fail())
+	{
+		cout << "Error opening file containing medication in stock." << endl;
+	}
+
+
+	for (int i = 0; i < 200; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			stockFileOut << setw(15) << left;
+			stockFileOut << stockArray[i][j];
+			if (j == 2)
+			{
+				stockFileOut << endl;
+			}
+		}
+	}
+
+	stockFileOut.close(); 
 
 
 }
