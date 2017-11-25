@@ -82,9 +82,9 @@ private:
 	int dosage2;
 	int dosage3;
 
-	int pill1; //Represents the amount of the first dosage of the medication it will take to fill the prescription.
-	int pill2; //Represents the amount of the second dosage of the medication it will take to fill the prescription.
-	int pill3; //Represents the amount of the third dosage of the medication it will take to fill the prescription.
+	int pill1 = 0; //Represents the amount of the first dosage of the medication it will take to fill the prescription.
+	int pill2 = 0; //Represents the amount of the second dosage of the medication it will take to fill the prescription.
+	int pill3 = 0; //Represents the amount of the third dosage of the medication it will take to fill the prescription.
 
 	//These three variables wil be used to pull in the three dosage pricesd corresponding to a specific medication designated by the user. 
 	double cost1;

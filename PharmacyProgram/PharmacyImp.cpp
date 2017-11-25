@@ -231,8 +231,8 @@ void Pharmacy::displayPharmacistOptions()
 void Pharmacy::fillPrescription()
 {
 	int count = 0;
-	ifstream  namesFile, costsFile, dosagesFile, stockFile;
-
+	ifstream  namesFileIn, costsFileIn, dosagesFileIn, stockFileIn;
+	ofstream stockFileOut;
 	string carryName;
 
 	int whichCostEffectiveMethod = 0;
@@ -246,19 +246,19 @@ void Pharmacy::fillPrescription()
 		cin >> whichMedication;
 
 		//The file containing the names of the medications is opened.
-		namesFile.open(".\\PharmacyInformation\\MedicationNames.dat");
+		namesFileIn.open(".\\PharmacyInformation\\MedicationNames.dat");
 
 		//If the file containing the medication names could not be opened the program will display an error.
-		if (namesFile.fail())
+		if (namesFileIn.fail())
 		{
 			cout << "Error opening file containing medication names" << endl;
 		}//end of if
 
 		//While not at the end of the file, compare each name in the file to the string whichMedication. (Search algorithm).
-		while (!namesFile.eof())
+		while (!namesFileIn.eof())
 		{
 			//Copy medication name into string "carryName".
-			getline(namesFile, carryName);
+			getline(namesFileIn, carryName);
 
 			//When carryName is equivalent to whichMedication (the medication the user typed in earlier)
 			if (carryName == whichMedication)
@@ -279,7 +279,7 @@ void Pharmacy::fillPrescription()
 		}//end of while
 
 		//The file containing the names of medications is closed.
-		namesFile.close();
+		namesFileIn.close();
 
 	} while (!medicationFound); //end of do...while
 	//______________________________________________________Pricing information________________________________________________________________________________//
@@ -295,76 +295,76 @@ void Pharmacy::fillPrescription()
 	cin >> dosageFrequency;
 	
 	//The file containing medication pricing information is opened.
-	costsFile.open(".\\PharmacyInformation\\MedicationCosts.dat");
+	costsFileIn.open(".\\PharmacyInformation\\MedicationCosts.dat");
 
 	//If file open failure -> display error message. Else nothing.
-	if (costsFile.fail())
+	if (costsFileIn.fail())
 	{
 		cout << "Error opening file containing medication pricing information." << endl;
 	}
 
-	while (!costsFile.eof())
+	while (!costsFileIn.eof())
 	{
 		int count = 0;
 
 		if (count == medicationRow)
 		{
-			costsFile >> cost1 >> cost2 >> cost3;
+			costsFileIn >> cost1 >> cost2 >> cost3;
 		}
 
 		count++;
 	}//end of while
 
-	costsFile.close();
+	costsFileIn.close();
 	//_______________________________________________________Dosage information_______________________________________________________________________________//
 
 	//The file containing the dosages that the pharmacy carries of each type of medication is opened.
-	dosagesFile.open(".\\PharmacyInformation\\MedicationDosages.dat");
+	dosagesFileIn.open(".\\PharmacyInformation\\MedicationDosages.dat");
 
 	//If the file containing the dosages cannot be opened, an error message is displayed.
-	if (dosagesFile.fail()) //alternative would be to use if(!dosagesFile.is_open())
+	if (dosagesFileIn.fail()) //alternative would be to use if(!dosagesFile.is_open())
 	{
 		cout << "Error opening file containing medication dosages." << endl;
 	}
 
-	while (!dosagesFile.eof())
+	while (!dosagesFileIn.eof())
 	{
 		int count = 0;
 
 		if (count == medicationRow)
 		{
-			dosagesFile >> dosage1 >> dosage2 >> dosage3;
+			dosagesFileIn >> dosage1 >> dosage2 >> dosage3;
 		}
 
 		count++;
 	}//end of while
 
 	 //File containing the dosages of the medications is closed.
-	dosagesFile.close();
+	dosagesFileIn.close();
 
 	//_______________________________________________________Stock of drug information_______________________________________________________________________________//
 
 	//The file containing the quantities of each medication in stock is presented.
-	stockFile.open(".\\PharmacyInformation\\MedicationStock.dat");
+	stockFileIn.open(".\\PharmacyInformation\\MedicationStock.dat");
 
 	//If the file containing medication stock cannot be opened, an error message is displayed.
-	if (stockFile.fail())
+	if (stockFileIn.fail())
 	{
 		cout << "Error opening file containing medication in stock." << endl;
 	}
 
 	//While not at the end of the while, search for the row that contains all the information about specific medication. Once at that row, grab1 >> grab2 >> grab3.
-	while (!stockFile.eof())
+	while (!stockFileIn.eof())
 	{
 		int count = 0;
 		if (count == medicationRow)
 		{
-			stockFile >> stock1 >> stock2 >> stock3;
+			stockFileIn >> stock1 >> stock2 >> stock3;
 		}
 		count++;
 	}//end of while
 
-	stockFile.close();
+	stockFileIn.close();
 
 
 	//_______________________________________________________Cost display and efficacy suggestion_______________________________________________________________________________//
@@ -452,8 +452,31 @@ void Pharmacy::fillPrescription()
 		break;
 	}
 	
+	//_______________________________________________________Update stock_______________________________________________________________________________//
 	
-	
+	//The file containing the quantities of each medication in stock is presented.
+	stockFileIn.open(".\\PharmacyInformation\\MedicationStock.dat");
+
+	//If the file containing medication stock cannot be opened, an error message is displayed.
+	if (stockFileIn.fail())
+	{
+		cout << "Error opening file containing medication in stock." << endl;
+	}
+
+	//While not at the end of the while, search for the row that contains all the information about specific medication. Once at that row, grab1 >> grab2 >> grab3.
+	while (!stockFileIn.eof())
+	{
+		int count = 0;
+		if (count == medicationRow)
+		{
+			stockFileIn >> stock1 >> stock2 >> stock3;
+		}
+		count++;
+	}//end of while
+
+	stockFileIn.close();
+
+
 }
 
 
