@@ -65,8 +65,30 @@ public:
 	string password;
 
 private:
-	int pharmacistDecision; 
-	int continueOrNot;
+	int pharmacistDecision; //used to allow the pharmacist to make a decision
+	int continueOrNot; 
+	string whichMedication; //Which medication the pharmacist has chosen
+	int medicationRow;
+	double whichDosage;
+
+	//These three variables store the inputs of the pharmacist that are used to calculate the most cost effective way for the pharmacist to fill the prescription.
+	int prescriptionLength; //Variable represents the length of time the prescription will last
+	int prescriptionDosage;
+	int dosageFrequency;
+	double costEffectiveSolution;
+
+	//These three variables will be used to pull in the three dosages corresponding to a specific medication. The most cost effective dosage combo will then be presented to user and the user can chose.
+	double dosage1;
+	double dosage2;
+	double dosage3;
+
+	//These three variables wil be used to pull in the three dosage pricesd corresponding to a specific medication designated by the user. 
+	double cost1;
+	double cost2;
+	double cost3;
+
+	//These three variables will be used to pull in the three dosage's stock information corresponding to a specific medication designated by the user.
+
 };
 
 

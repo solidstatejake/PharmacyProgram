@@ -197,6 +197,8 @@ void Pharmacy::displayPharmacistOptions()
 
 		cin >> pharmacistDecision;
 
+		clearConsole();
+
 		switch (pharmacistDecision)
 		{
 		case 1:
@@ -213,6 +215,8 @@ void Pharmacy::displayPharmacistOptions()
 			break;
 		}
 		
+		clearConsole();
+
 		cout << "Would you like to do something else?" << endl
 			<< "Enter [1] if you would like to display the list of options again." << endl
 			<< "Enter [0] if you are done making decisions." << endl;
@@ -226,7 +230,137 @@ void Pharmacy::displayPharmacistOptions()
 
 void Pharmacy::fillPrescription()
 {
+	int count = 0;
+	ifstream  namesFile, costsFile, dosagesFile, stockFile;
 
+	string carryName;
+
+	int medicationFound = 0;
+	//___________________________________________________________Medication name information___________________________________________________________________________//
+	do
+	{
+		//Prompts user for medication name they are searching for.
+		cout << "Please enter the name of the medication in all capitals that you would like to fill the prescription of." << endl;
+		cin >> whichMedication;
+
+		//The file containing the names of the medications is opened.
+		namesFile.open(".\\PharmacyInformation\\MedicationNames.dat");
+
+		//If the file containing the medication names could not be opened the program will display an error.
+		if (namesFile.fail())
+		{
+			cout << "Error opening file containing medication names" << endl;
+		}//end of if
+
+		//While not at the end of the file, compare each name in the file to the string whichMedication. (Search algorithm).
+		while (!namesFile.eof())
+		{
+			//Copy medication name into string "carryName".
+			getline(namesFile, carryName);
+
+			//When carryName is equivalent to whichMedication (the medication the user typed in earlier)
+			if (carryName == whichMedication)
+			{
+				medicationFound = 1;
+				medicationRow = count;
+				cout << "Medication found in list of medications." << endl;
+			}
+			else
+			{
+				medicationFound = 0;
+				cout << "Error. Medication not found in the list of medications. Rerouting." << endl;
+			}
+			
+			//count used to keep track of which row the medication occupies in sequential data file.
+			count++;
+
+		}//end of while
+
+		//The file containing the names of medications is closed.
+		namesFile.close();
+
+	} while (!medicationFound); //end of do...while
+	//______________________________________________________Pricing information________________________________________________________________________________//
+
+	clearConsole();
+
+	cout << "Please enter the information about the prescription for this drug." << endl
+		<< "Enter the length of time in days the presciption is supposed to last: ";
+	cin >> prescriptionLength;
+	cout << "Please enter the dose the patient is supposed to take: ";
+	cin >> prescriptionDosage;
+	cout << "Please enter the frequency of this dosage (how many times per day): ";
+	cin >> dosageFrequency;
+	
+	//The file containing medication pricing information is opened.
+	costsFile.open(".\\PharmacyInformation\\MedicationCosts.dat");
+
+	//If file open failure -> display error message. Else nothing.
+	if (costsFile.fail())
+	{
+		cout << "Error opening file containing medication pricing information." << endl;
+	}
+
+	while (!costsFile.eof())
+	{
+		int count = 0;
+
+		if (count == medicationRow)
+		{
+			costsFile >> cost1 >> cost2 >> cost3;
+		}
+
+		count++;
+	}//end of while
+	//_______________________________________________________Dosage information_______________________________________________________________________________//
+
+	//The file containing the dosages that the pharmacy carries of each type of medication is opened.
+	dosagesFile.open(".\\PharmacyInformation\\MedicationDosages.dat");
+
+	//If the file containing the dosages cannot be open, an error message is displayed.
+	if (dosagesFile.fail()) //alternative would be to use if(!dosagesFile.is_open())
+	{
+		cout << "Error opening file containing medication dosages." << endl;
+	}
+
+	while (!dosagesFile.eof())
+	{
+		int count = 0;
+
+		if (count == medicationRow)
+		{
+			dosagesFile >> dosage1 >> dosage2 >> dosage3;
+		}
+
+		count++;
+	}//end of while
+
+	 //File containing the dosages of the medications is closed.
+	dosagesFile.close();
+
+	//_______________________________________________________Stock of drug information_______________________________________________________________________________//
+
+	//The file containing the quantities of each medication in stock is presented.
+	stockFile.open(".\\PharmacyInformation\\MedicationQuantities.dat");
+
+	if (stockFile.fail())
+	{
+		cout << "Error opening file containing medication in stock." << endl;
+	}
+
+
+
+
+	//_______________________________________________________Cost display and efficacy suggestion_______________________________________________________________________________//
+
+	costEffectiveSolution = 
+	cout << "These are the dosages available based on the medication you have chosen: " << endl
+		<< dosage1 << "mg @ $" << cost1 << " per pill." << endl
+		<< dosage2 << "mg @ $" << cost2 << " per pill." << endl
+		<< dosage3 << "mg @ $" << cost3 << " per pill." << endl;
+
+	
+	
 }
 
 
