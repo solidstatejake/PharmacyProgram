@@ -108,10 +108,10 @@ void Pharmacy::resetMedicationDosages()
 				dosageFileOut << 25 << setw(15) << left << 50 << 75 << endl;
 				break;
 			case 2:
-				dosageFileOut << 12.5 << setw(15) << left << 25 << 40 << endl;
+				dosageFileOut << 12 << setw(15) << left << 25 << 40 << endl;
 				break;
 			case 3: 
-				dosageFileOut << 0.5 << setw(15) << left << 1.0 << 2.0 << endl;
+				dosageFileOut << 2 << setw(15) << left << 4 << 6 << endl;
 				break;
 			case 4:
 				dosageFileOut << 5 << setw(15) << left << 10 << 20 << endl;
@@ -126,7 +126,7 @@ void Pharmacy::resetMedicationDosages()
 				dosageFileOut << 50 << setw(15) << left << 100 << 250 << endl;
 				break;
 			case 8:
-				dosageFileOut << 7.5 << setw(15) << left << 15 << 30 << endl;
+				dosageFileOut << 75 << setw(15) << left << 150 << 300 << endl;
 				break;
 			case 9:
 				dosageFileOut << 500 << setw(15) << left << 1000 << 2000 << endl;
@@ -707,6 +707,107 @@ void Pharmacy::updateStock()
 
 void Pharmacy::viewStock()
 {
+	ifstream stockFileIn, costsFileIn, dosagesFileIn, namesFileIn;
+
+
+	//______________________________________________________IMPORTING STOCK DATA_____________________________________________________________//
+	stockFileIn.open(".\\PharmacyInformation\\MedicationStock.dat");
+
+	if (stockFileIn.fail())
+	{
+		cout << "Error opening file containing medication stock." << endl;
+	}
+
+	//For loop that grabs all stock data and throws it into the stock array. Now capable of being printed to screen.
+	for (int i = 0; i < 200; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			stockFileIn >> stockArray[i][j];
+		}
+	}
+
+	stockFileIn.close();
+
+	//_______________________________________________________IMPORTING COSTS DATA___________________________________________________________________//
+	
+	
+	costsFileIn.open(".\\PharmacyInformation\\MedicationCosts.dat");
+
+	if (costsFileIn.fail())
+	{
+		cout << "Error opening file containing medication stock." << endl;
+	}
+	
+	
+	for (int i = 0; i < 200; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			costsFileIn >> medicationCostsArray[i][j];
+		}
+	}
+	
+	costsFileIn.close();
+	
+	//__________________________________________________________IMPORTING DOSAGES DATA_________________________________________________________________//
+	
+	dosagesFileIn.open(".\\PharmacyInformation\\MedicationDosages.dat");
+
+	if (dosagesFileIn.fail())
+	{
+		cout << "Error opening file containing medication dosages" << endl;
+	}
+
+	for (int i = 0; i < 200; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			dosagesFileIn >> medicationDosagesArray[i][j];
+		}
+	}
+
+	dosagesFileIn.close();
+	
+	
+	//__________________________________________________________IMPORTING NAMES DATA_________________________________________________________________//
+
+	namesFileIn.open(".\\PharmacyInformation\\MedicationNames.dat");
+
+	if (namesFileIn.fail())
+	{
+		cout << "Error opening the file containing the names of the medications." << endl;
+	}
+
+	for (int i = 0; i < 200; i++)
+	{
+		namesFileIn >> medicationNamesArray[i];
+	}
+	
+	namesFileIn.close();
+
+
+	//______________________________________________________________PRINTING OUT INFORMATION______________________________________________________________//
+	cout << setw(15) << setfill('_')<< left << "Name:" << setw(15) << setfill('_') << left << "Dosages:" 
+		<< setw(15) << setfill('_') << left << "Prices:" << setw(15) << setfill('_') << left << "Quantity in stock:" << endl;
+
+	for (int i = 0; i < 200; i++)
+	{
+		cout << setw(15) << setfill('.') << left << medicationNamesArray[i];
+
+		for (int j = 0; j < 3; j++)
+		{
+			if (j != 0)
+			{
+				cout << "               ";
+			}
+			cout << setw(15) << setfill('_') << right << medicationDosagesArray[i][j]
+				<< setw(15) << setfill('_') << right << medicationCostsArray[i][j]
+				<< setw(15) << setfill('_') << right << stockArray[i][j] << endl;
+		}
+		
+	}
+
 	//Provide code that opens the file containing stock and allows changes.
 }
 
