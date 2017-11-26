@@ -103,6 +103,8 @@ private:
 	int stock1;
 	int stock2;
 	int stock3;
+
+	//Arrays used to grab data from files and hold.
 	string medicationNamesArray[200];
 	int stockArray[200][3];
 	double medicationCostsArray[200][3];

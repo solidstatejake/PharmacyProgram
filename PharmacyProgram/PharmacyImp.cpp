@@ -203,7 +203,6 @@ void Pharmacy::introToUser() const
 	//write some more shit that explains to a pharmacist how to fill a prescription.
 }
 
-
 void Pharmacy::grabUsername()
 {
 	//Making use of whitespace.
@@ -388,6 +387,8 @@ void Pharmacy::displayPharmacistOptions()
 			<< "Enter [0] if you are done making decisions." << endl;
 
 		cin >> continueOrNot;
+
+		clearConsole();
 	} while (continueOrNot);
 	
 
@@ -396,7 +397,8 @@ void Pharmacy::displayPharmacistOptions()
 
 void Pharmacy::fillPrescription()
 {
-	int count = 0;
+	int rowCount = 0;
+	int COUNT = 0;
 	ifstream  namesFileIn, costsFileIn, dosagesFileIn, stockFileIn;
 	fstream stockFileOut;
 	string carryName;
@@ -404,10 +406,13 @@ void Pharmacy::fillPrescription()
 	int whichCostEffectiveMethod = 0;
 
 	int medicationFound = 0;
+
+	int storePointlessInts = 0;
+	double storePointlessDoubles = 0;
+
 	//___________________________________________________________Medication name information___________________________________________________________________________//
 	do
 	{
-		count = 0;
 		//Prompts user for medication name they are searching for.
 		cout << "Please enter the name of the medication in all capitals that you would like to fill the prescription of." << endl;
 		cin >> whichMedication;
@@ -426,22 +431,23 @@ void Pharmacy::fillPrescription()
 		{
 			//Copy medication name into string "carryName".
 			getline(namesFileIn, carryName);
-		
+
 			//When carryName is equivalent to whichMedication (the medication the user typed in earlier)
 			if (carryName == whichMedication)
 			{
 				medicationFound = 1;
-				medicationRow = count;
-				cout << "Medication found in list of medications." << endl;
+				medicationRow = rowCount;
+				cout << "Medication found in list of medications. It is on row " << rowCount <<medicationRow << endl;
+				break;
 			}
-			else
+			else if ((rowCount == 199) && (carryName != whichMedication))
 			{
 				medicationFound = 0;
 				cout << "Error. Medication not found in the list of medications. Rerouting." << endl;
 			}
 			
 			//count used to keep track of which row the medication occupies in sequential data file.
-			count++;
+			rowCount++;
 
 		}//end of while
 
@@ -449,9 +455,13 @@ void Pharmacy::fillPrescription()
 		namesFileIn.close();
 
 	} while (!medicationFound); //end of do...while
+
+
+
+
 	//______________________________________________________Pricing information________________________________________________________________________________//
 
-	clearConsole();
+	//clearConsole();
 
 	cout << "Please enter the information about the prescription for this drug." << endl
 		<< "Enter the length of time in days the presciption is supposed to last: ";
@@ -464,25 +474,35 @@ void Pharmacy::fillPrescription()
 	//The file containing medication pricing information is opened.
 	costsFileIn.open(".\\PharmacyInformation\\MedicationCosts.dat");
 
-	//If file open failure -> display error message. Else nothing.
+	//If file open failure -> display error message. Else if file is open, say open.
 	if (costsFileIn.fail())
 	{
 		cout << "Error opening file containing medication pricing information." << endl;
 	}
-
-	while (!costsFileIn.eof())
+	else if (costsFileIn.is_open())
 	{
-		int count = 0;
+		cout << "Costs file opened." << endl;
+	}
+	cout << endl << endl <<  "MEDICATIONROW =" << medicationRow << endl << endl;
 
-		if (count == medicationRow)
+	while (COUNT < 200)
+	{
+	
+		if (COUNT == medicationRow)
 		{
 			costsFileIn >> cost1 >> cost2 >> cost3;
+			break;
+		}
+		else
+		{
+			costsFileIn >> storePointlessDoubles >> storePointlessDoubles >> storePointlessDoubles;
 		}
 
-		count++;
+		COUNT++;
 	}//end of while
 
 	costsFileIn.close();
+	
 	//_______________________________________________________Dosage information_______________________________________________________________________________//
 
 	//The file containing the dosages that the pharmacy carries of each type of medication is opened.
@@ -493,21 +513,35 @@ void Pharmacy::fillPrescription()
 	{
 		cout << "Error opening file containing medication dosages." << endl;
 	}
-
-	while (!dosagesFileIn.eof())
+	else if (dosagesFileIn.is_open())
 	{
-		int count = 0;
+		cout << "Dosages file opened." << endl;
+	}
 
-		if (count == medicationRow)
+	//Sets the row-tracking count back to zero.
+	COUNT = 0;
+
+	while (COUNT < 200)
+	{
+		dosagesFileIn >> storePointlessInts >> storePointlessInts >> storePointlessInts;
+		
+		if (COUNT == medicationRow)
 		{
 			dosagesFileIn >> dosage1 >> dosage2 >> dosage3;
+			break;
+		}
+		else
+		{
+			dosagesFileIn >> storePointlessInts >> storePointlessInts >> storePointlessInts;
 		}
 
-		count++;
+		COUNT++;
 	}//end of while
 
 	 //File containing the dosages of the medications is closed.
 	dosagesFileIn.close();
+
+
 
 	//_______________________________________________________Stock of drug information_______________________________________________________________________________//
 
@@ -519,19 +553,34 @@ void Pharmacy::fillPrescription()
 	{
 		cout << "Error opening file containing medication in stock." << endl;
 	}
+	else if (stockFileIn.is_open())
+	{
+		cout << "Stock file opened." << endl;
+	}
+
+	//Sets the row-tracking count back to zero.
+	COUNT = 0;
 
 	//While not at the end of the while, search for the row that contains all the information about specific medication. Once at that row, grab1 >> grab2 >> grab3.
-	while (!stockFileIn.eof())
+	while (COUNT < 200)
 	{
-		int count = 0;
-		if (count == medicationRow)
+
+		if (COUNT == medicationRow)
 		{
 			stockFileIn >> stock1 >> stock2 >> stock3;
+			break;
 		}
-		count++;
+		else
+		{
+			stockFileIn >> storePointlessInts >> storePointlessInts >> storePointlessInts;
+		}
+		COUNT++;
 	}//end of while
 
 	stockFileIn.close();
+
+
+
 
 
 	//_______________________________________________________Cost display and efficacy suggestion_______________________________________________________________________________//
@@ -549,7 +598,7 @@ void Pharmacy::fillPrescription()
 	{
 		pill2 = (prescriptionDosage * dosageFrequency * prescriptionLength) / dosage2;
 	}
-	else if ((prescriptionDosage % dosage3) == 0)
+	else if ((prescriptionDosage % dosage1) == 0)
 	{
 		pill1 = (prescriptionDosage * dosageFrequency * prescriptionLength) / dosage1;
 	}
@@ -572,12 +621,12 @@ void Pharmacy::fillPrescription()
 		whichCostEffectiveMethod = 3;
 		costEffectiveSolution = cost3*pill3;
 	}
-	else if (stock2 > 0 && stock2 >= pill2 && ((prescriptionDosage % dosage2) == 0))
+	else if ((stock2 > 0) && (stock2 >= pill2) && ((prescriptionDosage % dosage2) == 0))
 	{
 		whichCostEffectiveMethod = 2;
 		costEffectiveSolution = cost2*pill2;
 	}
-	else if (stock1 > 0 && stock1 >= pill1 && ((prescriptionDosage % dosage1) == 0))
+	else if ((stock1 > 0) && (stock1 >= pill1) && ((prescriptionDosage % dosage1) == 0))
 	{
 		whichCostEffectiveMethod = 1;
 		costEffectiveSolution = cost1*pill1;
@@ -601,19 +650,19 @@ void Pharmacy::fillPrescription()
 	{
 	case 1:
 		cout << "The cost-effective recommendation is as follows:" << endl
-			<< "Using " << dosage1 << "mg pills, fill the prescription as follows:"
+			<< "Using " << dosage1 << "mg pills, fill the prescription as follows:" << endl
 			<< pill1 << "x " << whichMedication << "." << endl
 			<< "The cost of this prescription will be " << costEffectiveSolution << "$." << endl;
 		break;
 	case 2:
 		cout << "The cost-effective recommendation is as follows:" << endl
-			<< "Using " << dosage2 << "mg pills, fill the prescription as follows:"
+			<< "Using " << dosage2 << "mg pills, fill the prescription as follows:" << endl
 			<< pill2 << "x " << whichMedication << "." << endl
 			<< "The cost of this prescription will be " << costEffectiveSolution << "$." << endl;
 		break;
 	case 3:
 		cout << "The cost-effective recommendation is as follows:" << endl
-			<< "Using " << dosage3 << "mg pills, fill the prescription as follows:"
+			<< "Using " << dosage3 << "mg pills, fill the prescription as follows:" << endl
 			<< pill3 << "x " << whichMedication << "." << endl
 			<< "The cost of this prescription will be " << costEffectiveSolution << "$." << endl;
 		break;
