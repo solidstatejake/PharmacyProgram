@@ -407,6 +407,7 @@ void Pharmacy::fillPrescription()
 	//___________________________________________________________Medication name information___________________________________________________________________________//
 	do
 	{
+		count = 0;
 		//Prompts user for medication name they are searching for.
 		cout << "Please enter the name of the medication in all capitals that you would like to fill the prescription of." << endl;
 		cin >> whichMedication;
@@ -425,7 +426,7 @@ void Pharmacy::fillPrescription()
 		{
 			//Copy medication name into string "carryName".
 			getline(namesFileIn, carryName);
-
+		
 			//When carryName is equivalent to whichMedication (the medication the user typed in earlier)
 			if (carryName == whichMedication)
 			{
@@ -807,8 +808,6 @@ void Pharmacy::viewStock()
 		}
 		
 	}
-
-	//Provide code that opens the file containing stock and allows changes.
 }
 
 void Pharmacy::displayReceipts()
