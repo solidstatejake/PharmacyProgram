@@ -52,6 +52,7 @@ public:
 
 	void fillPrescription();
 
+	void printScriptReceipt();
 	void updateStock();
 
 	void viewStock();
@@ -78,10 +79,15 @@ private:
 	int medicationRow;
 	double whichDosage;
 
+	
 	//These three variables store the inputs of the pharmacist that are used to calculate the most cost effective way for the pharmacist to fill the prescription.
+	string prescriptionDate;
+	string patientName;
 	int prescriptionLength; //Variable represents the length of time the prescription will last
 	int prescriptionDosage;
 	int dosageFrequency;
+	
+
 	int amountOfPillsToMakeUpScript; //Variable used to combine the three above variables; this will make it easier to create algorithms; working with one variable instead of three.
 	double costEffectiveSolution;
 

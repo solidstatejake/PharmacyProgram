@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Pharmacy.h"
+#include <iostream>
 
 using namespace std;
 
@@ -457,14 +458,18 @@ void Pharmacy::fillPrescription()
 	} while (!medicationFound); //end of do...while
 
 
-
+	
 
 	//______________________________________________________Pricing information________________________________________________________________________________//
 
 	//clearConsole();
 
 	cout << "Please enter the information about the prescription for this drug." << endl
-		<< "Enter the length of time in days the presciption is supposed to last: ";
+		<< "What is the date?";
+	cin >> prescriptionDate;
+	cout <<"What is the name of the patient the prescription is for?" << endl;
+	cin >> patientName;
+	cout << "Enter the length of time in days the presciption is supposed to last: ";
 	cin >> prescriptionLength;
 	cout << "Please enter the dose in milligrams the patient is supposed to take: ";
 	cin >> prescriptionDosage;
@@ -523,7 +528,6 @@ void Pharmacy::fillPrescription()
 
 	while (COUNT < 200)
 	{
-		dosagesFileIn >> storePointlessInts >> storePointlessInts >> storePointlessInts;
 		
 		if (COUNT == medicationRow)
 		{
@@ -574,6 +578,7 @@ void Pharmacy::fillPrescription()
 		{
 			stockFileIn >> storePointlessInts >> storePointlessInts >> storePointlessInts;
 		}
+
 		COUNT++;
 	}//end of while
 
@@ -745,13 +750,305 @@ void Pharmacy::fillPrescription()
 
 	stockFileOut.close(); 
 
+	printScriptReceipt();
+}
 
+void Pharmacy::printScriptReceipt()
+{
+	ofstream receiptFileOut;
+
+	//The next few lines represent the concatenation of the file name.
+	string receiptFileName = ".\\PharmacyInformation\\Receipts\\";
+	
+	receiptFileName.append(patientName);
+	receiptFileName.append(prescriptionDate);
+	receiptFileName.append(".dat");
+
+	receiptFileName.c_str();
+
+	//Create a new file whose name is a concatenation of the patient's name and the date.
+	receiptFileOut.open(receiptFileName);
+
+	
+	//Error check to make sure the output file has been opened.
+	if (receiptFileOut.fail())
+	{
+		cout << "SOMETHING HAPPENED" << endl;
+	}
+
+	//Print receipt file headers
+	receiptFileOut << setw(25) << left << "Patient name:" << setw(25) << left << "Prescription date:"
+		<< setw(25) << left << "Medication name:" << setw(25) << left << "Prescription dosage:"
+		<< setw(25) << left << "Prescription length:" << setw(25) << left << "Dosage frequency:" << endl;
+
+	//Print specific prescription information
+	receiptFileOut << setw(25) << left << patientName << setw(25) << left << prescriptionDate
+		<< setw(25) << left << whichMedication << setw(25) << left << prescriptionDosage
+		<< setw(25) << left << prescriptionLength << setw(25) << left << dosageFrequency << endl;
+	
+	//Close the newly-created file containing the receipt
+	receiptFileOut.close();
 }
 
 
 void Pharmacy::updateStock()
 {
+	//Input files
+	ifstream namesFileIn, dosagesFileIn, stockFileIn, costsFileIn;
+	
+	//Output files
+	ofstream namesFileOut, dosagesFileOut, stockFileOut, costsFileOut;
 
+	//Decision-making integer variables
+	int rowToEdit = 0,
+		dataToEdit = 0,
+		whichDosageToEdit = 0,
+	    areYouFinished = 0;
+	//__________________________________________________________IMPORTING NAMES DATA_________________________________________________________________//
+
+	namesFileIn.open(".\\PharmacyInformation\\MedicationNames.dat");
+
+	if (namesFileIn.fail())
+	{
+		cout << "Error opening the file containing the names of the medications." << endl;
+	}
+
+	for (int i = 0; i < 200; i++)
+	{
+		namesFileIn >> medicationNamesArray[i];
+	}
+
+	namesFileIn.close();
+
+	//__________________________________________________________IMPORTING DOSAGES DATA_________________________________________________________________//
+
+	dosagesFileIn.open(".\\PharmacyInformation\\MedicationDosages.dat");
+
+	if (dosagesFileIn.fail())
+	{
+		cout << "Error opening file containing medication dosages" << endl;
+	}
+
+	for (int i = 0; i < 200; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			dosagesFileIn >> medicationDosagesArray[i][j];
+		}
+	}
+
+	dosagesFileIn.close();
+
+
+	//______________________________________________________IMPORTING STOCK DATA_____________________________________________________________//
+
+	stockFileIn.open(".\\PharmacyInformation\\MedicationStock.dat");
+
+	if (stockFileIn.fail())
+	{
+		cout << "Error opening file containing medication stock." << endl;
+	}
+
+	//For loop that grabs all stock data and throws it into the stock array. Now capable of being printed to screen.
+	for (int i = 0; i < 200; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			stockFileIn >> stockArray[i][j];
+		}
+	}
+
+	stockFileIn.close();
+
+	//_______________________________________________________IMPORTING COSTS DATA___________________________________________________________________//
+
+
+	costsFileIn.open(".\\PharmacyInformation\\MedicationCosts.dat");
+
+	if (costsFileIn.fail())
+	{
+		cout << "Error opening file containing medication stock." << endl;
+	}
+
+
+	for (int i = 0; i < 200; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			costsFileIn >> medicationCostsArray[i][j];
+		}
+	}
+
+	costsFileIn.close();
+
+
+	//_______________________________________________________PRINTING OUT STOCK INFO_________________________________________________________//
+
+	int rowWidth = 15;
+
+
+	do
+	{
+		
+
+		cout << "Below the stock file is provided. Numbers 1 - 200 are displayed to the left of each medication information. Review the file and enter" << endl
+			<< "the number of the row which you would like to edit. You will be continuously prompted to make edits until you decide otherwise." << endl
+			<< "Here is the stock list:" << endl << endl;
+
+		cout << setw(15) << left << "Row #:" << setw(15) << left << "Name:" << setw(15) << left << "Dosages:"
+			<< setw(15) << left << "Prices:" << setw(15) << left << "Quantity in stock:" << endl;
+
+		for (int i = 0; i < 200; i++)
+		{
+			/*
+			if (medicationNamesArray[i].length() > 11)
+			{
+				rowWidth = 14;
+			}
+			else if (medicationNamesArray[i].length() > 12)
+			{
+				rowWidth = 13;
+			}
+			*/ //TRYING TO FIX THE FACT THAT AFTER THE MEDICATION STRING NAME HAS MORE THAN 11 CHARACTERS, THE ROWS ARE NO LONGER 
+			//COMPLETELY ORGANIZED.
+
+
+			cout << left << "Row[" << i + 1 << setw(10) << left << "]:" << setw(15) << setfill('_') << left << medicationNamesArray[i];
+
+			for (int j = 0; j < 3; j++)
+			{
+				if (j != 0)
+				{
+					cout << "                              ";
+				}//end of if
+
+				cout << setw(10) << setfill('_') << right << medicationDosagesArray[i][j]
+					<< setw(15) << setfill('_') << right << medicationCostsArray[i][j]
+					<< setw(27) << setfill('_') << right << stockArray[i][j] << endl;
+
+				if (j == 2)
+				{
+					cout << endl;
+				}
+			}//end of j for
+		}//end of i for
+
+
+		//Prompting user to enter the row number they would like to edit.
+		cout << endl << endl << "Enter the row number you would like to edit: ";
+		cin >> rowToEdit;
+
+		//Headers of medication data
+		cout << setw(15) << left << "Name:" << setw(15) << left << "Dosages:"
+			<< setw(15) << left << "Prices:" << setw(15) << left << "Quantity in stock:" << endl;
+
+
+		cout << setw(15) << setfill('_') << left << medicationNamesArray[rowToEdit - 1];
+
+		for (int j = 0; j < 3; j++)
+		{
+			if (j != 0)
+			{
+				cout << "               ";
+			}//end of if
+
+			cout << setw(10) << setfill('_') << right << medicationDosagesArray[rowToEdit-1][j]
+				<< setw(15) << setfill('_') << right << medicationCostsArray[rowToEdit-1][j]
+				<< setw(27) << setfill('_') << right << stockArray[rowToEdit-1][j] << endl;
+
+			if (j == 2)
+			{
+				cout << endl;
+			}
+		}//end of j for
+
+
+		cout << "Which would you like to edit?" << endl
+			<< "Enter [1] to edit the name of the medication." << endl
+			<< "Enter [2] to edit the dosages of the medication." << endl
+			<< "Enter [3] to edit the prices of the medication." << endl
+			<< "Enter [4] to edit the stock of the medication." << endl;
+
+		cin >> dataToEdit;
+
+
+		switch (dataToEdit)
+		{
+		case 1:
+			cout << "Enter the change to the medication's name:";
+			cin >> medicationNamesArray[rowToEdit-1];
+			break;
+
+		case 2:
+			
+			do
+			{
+				cout << "Enter the change to the medication's dosage(s):" << endl
+					<< "Enter [1] to change the smallest dosage: " << medicationDosagesArray[rowToEdit-1][0] << endl
+					<< "Enter [2] to change the middle dosage: " << medicationDosagesArray[rowToEdit-1][1] << endl
+					<< "Enter [3] to change the largest dosage: " << medicationDosagesArray[rowToEdit-1][2] << endl;
+				cin >> whichDosageToEdit;
+
+				cout << "Enter the change in dosage: ";
+				cin >> medicationDosagesArray[rowToEdit-1][whichDosageToEdit-1];
+
+				cout << "Would you like to make another change to the medication's dosage data?" << endl
+					<< "Enter [0] to make another change." << endl
+					<< "Enter [1] to finish." << endl;
+				cin >> areYouFinished;
+			} while (!areYouFinished);
+
+			break;
+
+		case 3:
+			
+			
+			do
+			{
+				cout << "Enter the change to the medication's prices(s):" << endl
+					<< "Enter [1] to change the smallest dosage's price: " << medicationCostsArray[rowToEdit-1][0] << endl
+					<< "Enter [2] to change the middle dosage's price: " << medicationCostsArray[rowToEdit-1][1] << endl
+					<< "Enter [3] to change the largest dosage's price: " << medicationCostsArray[rowToEdit-1][2] << endl;
+				cin >> whichDosageToEdit;
+
+				cout << "Enter the change in price: ";
+				cin >> medicationCostsArray[rowToEdit-1][whichDosageToEdit-1];
+
+				cout << "Would you like to make another change to the medication's dosage data?" << endl
+					<< "Enter [0] to make another change." << endl
+					<< "Enter [1] to finish." << endl;
+				cin >> areYouFinished;
+			} while (!areYouFinished);
+			break;
+
+		case 4:
+			
+			
+			do
+			{
+				cout << "Enter the change to the medication's stock:" << endl
+					<< "Enter [1] to change the smallest dosage's price: " << stockArray[rowToEdit-1][0] << endl
+					<< "Enter [2] to change the middle dosage's price: " << stockArray[rowToEdit-1][1] << endl
+					<< "Enter [3] to change the largest dosage's price: " << stockArray[rowToEdit-1][2] << endl;
+				cin >> whichDosageToEdit;
+
+				cout << "Enter the change in stock: ";
+				cin >> stockArray[rowToEdit-1][whichDosageToEdit-1];
+
+				cout << "Would you like to make another change to the medication's stock data?" << endl
+					<< "Enter [0] to make another change." << endl
+					<< "Enter [1] to finish." << endl;
+				cin >> areYouFinished;
+			} while (!areYouFinished);
+			break;
+		}
+
+		cout << "Would you like to review the medication data again and potentially make another change?" << endl
+			<< "Enter [0] to review medication data again and potentially make another change." << endl
+			<< "Enter [1] if you are finished." << endl;
+		cin >> areYouFinished;
+
+	}while (!areYouFinished);
 }
 
 
@@ -850,16 +1147,16 @@ void Pharmacy::viewStock()
 			if (j != 0)
 			{
 				cout << "               ";
-			}
+			}//end of if
+			
 			cout << setw(15) << setfill('_') << right << medicationDosagesArray[i][j]
 				<< setw(15) << setfill('_') << right << medicationCostsArray[i][j]
 				<< setw(15) << setfill('_') << right << stockArray[i][j] << endl;
-		}
-		
-	}
+		}//end of j for
+	}//end of i for
 }
 
 void Pharmacy::displayReceipts()
 {
-
+	ifstream receiptsFolder
 }
