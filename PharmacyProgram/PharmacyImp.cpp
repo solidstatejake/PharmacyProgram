@@ -206,6 +206,9 @@ void Pharmacy::introToUser() const
 
 void Pharmacy::grabUsername()
 {
+	//This will reset the password back to an empty string in case the user mis-enters their credentials.
+	password = "";
+
 	//Making use of whitespace.
 	cout << endl;
 
@@ -215,6 +218,10 @@ void Pharmacy::grabUsername()
 	//User is prompted for their username. That username is stored into the public member variable "username".
 	cout << "Please enter your username: ";
 	cin >> username;
+
+	//User is prompted for their ID number. That ID number is stored into the public member variable "IDnumber".
+	cout << "Please enter your user ID number: ";
+	cin >> IDnumber;
 
 	//User is prompted for their password. That password is stored into the public member variable "password".
 	cout << "Please enter your password: ";
@@ -259,13 +266,16 @@ int Pharmacy::verifyCredentials()
 
 	//cout << endl << username << password << endl << endl;
 	//Input file variables used to access the files containing usernames and passwords
-	ifstream usernameFile, passwordFile;
+	ifstream usernameFile, IDNumberFile, passwordFile;
 
 	//String used to carry in and hold names from username/password files. Variable is compared to what the user
 	//inputs as their username to check the validity of their entry. 
 	string compareCreds;
+	double compareIDCreds; //Overloaded instance of compareCreds varaible used to compare what the user inputs as their ID#
+						 //to the ID numbers in the verified ID# file.
 
 	bool usernameYesOrNo = 0,
+		IDYesOrNo = 0,
 		passwordYesOrNo = 0;
 
 	//Opens the file containing verified username information. The period at the front is known as the
@@ -300,7 +310,36 @@ int Pharmacy::verifyCredentials()
 	//The file containing the verified usernames is closed.
 	usernameFile.close();
 	
+	//The file containing verified user ID numbers is opened.
+	IDNumberFile.open(".\\UserInfo\\pharmacistIDs.dat");
+
+	//ERROR CHECK to make sure the user ID number file opens.
+	if (IDNumberFile.fail())
+	{
+		cout << "Error opening file containing verified user ID numbers." << endl;
+	}
 	
+	//User ID numbers are grabbed from user ID number file and placed into a comparative variable
+	//That comparative variable is then comapred to what the user has entered as their user ID number. 
+	//If the two match -> OK. Else -> no entry into system.
+	while (!IDNumberFile.eof())
+	{
+		IDNumberFile >> compareIDCreds;
+
+		if (compareIDCreds == IDnumber)
+		{
+			IDYesOrNo = true;
+			break;
+		}
+		else
+		{
+			IDYesOrNo = false;
+		}
+	}
+
+	//The file containing verified user ID numbers is closed
+	IDNumberFile.close();
+
 	//Opens the file containing verified password information
 	passwordFile.open(".\\UserInfo\\passwords.dat");
 
@@ -337,7 +376,7 @@ int Pharmacy::verifyCredentials()
 	passwordFile.close();
 
 	//If both the username and password are verified, then the function returns 1. Else 0.
-	if (usernameYesOrNo == true && passwordYesOrNo == true)
+	if (usernameYesOrNo == true && IDYesOrNo == true && passwordYesOrNo == true)
 	{
 		return 1;
 	}
@@ -346,7 +385,6 @@ int Pharmacy::verifyCredentials()
 		return 0;
 	}
 }
-
 
 void Pharmacy::displayPharmacistOptions()
 {
@@ -394,7 +432,6 @@ void Pharmacy::displayPharmacistOptions()
 	
 
 }
-
 
 void Pharmacy::fillPrescription()
 {
@@ -790,7 +827,6 @@ void Pharmacy::printScriptReceipt()
 	receiptFileOut.close();
 }
 
-
 void Pharmacy::updateStock()
 {
 	//Input files
@@ -1051,7 +1087,6 @@ void Pharmacy::updateStock()
 	}while (!areYouFinished);
 }
 
-
 void Pharmacy::viewStock()
 {
 	ifstream stockFileIn, costsFileIn, dosagesFileIn, namesFileIn;
@@ -1158,5 +1193,13 @@ void Pharmacy::viewStock()
 
 void Pharmacy::displayReceipts()
 {
-	ifstream receiptsFolder
+	ifstream receiptsFolder;
+	
+	string fileNames;
+
+	receiptsFolder.open(".\\PharmacyInformation\\Receipts");
+
+	getline(receiptsFolder, fileNames);
+
+	cout << fileNames << endl;
 }

@@ -70,6 +70,7 @@ public:
 
 
 	string username;
+	int IDnumber;
 	string password;
 
 private:
