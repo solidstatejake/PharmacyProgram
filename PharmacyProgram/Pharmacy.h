@@ -49,10 +49,24 @@ public:
 		//Postcondition: Administrative permissions are either granted or denied.
 
 	void displayPharmacistOptions();
+		//This function will display a list of options to the user. This function creates a junction by which the user can access
+		//all other imperative functions of the program.
+		//Postcondition: User is navigated to another section of the program (i.e. fillPrescription();, updateStock();...).
 
 	void fillPrescription();
+		//This function allows the user to fill a prescription. the user enters the medication name, patient name, date, length 
+		//of prescription, dosage, and frequency of dosage. 
+		//Post conditions:The most cost-effective way (for the user) of filling the prescription is offered to the user.
+		//A receipt of the transaction is then displayed to the user containing all pertinent information.
+		//All pertinent files are simultaneously edited to reflect the change in stock made by filling the prescription, and a new
+		//file is created containing a receipt of the transaction that is identical to the receipt displayed to user on the console.
 
 	void printScriptReceipt();
+		//This function prints the receipt of the prescription to the user. The function is called inside of the fillPrescription();
+		//function.
+		//Postcondition: A receipt containing the medication's name, the patient's name, the date, the length of time the prescription
+		//should last, the dosage (in mg) of the prescription, and the frequency at which the dosage should be taken is presented to 
+		//the user.
 	void updateStock();
 
 	void viewStock();
