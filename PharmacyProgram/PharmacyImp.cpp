@@ -443,7 +443,7 @@ void Pharmacy::fillPrescription()
 
 	int whichCostEffectiveMethod = 0;
 
-	int medicationFound = 0;
+	int medicationFound = 1;
 
 	int storePointlessInts = 0;
 	double storePointlessDoubles = 0;
@@ -451,6 +451,11 @@ void Pharmacy::fillPrescription()
 	//___________________________________________________________Medication name information___________________________________________________________________________//
 	do
 	{
+		if (medicationFound == 0)
+		{
+			medicationRow = 0;
+			rowCount = 0;
+		}
 		//Prompts user for medication name they are searching for.
 		cout << "Please enter the name of the medication in all capitals that you would like to fill the prescription of." << endl;
 		cin >> whichMedication;
@@ -475,7 +480,7 @@ void Pharmacy::fillPrescription()
 			{
 				medicationFound = 1;
 				medicationRow = rowCount;
-				cout << "Medication found in list of medications. It is on row " << rowCount <<medicationRow << endl;
+				cout << "Medication found in list of medications. It is on row " << medicationRow << "." << endl;
 				break;
 			}
 			else if ((rowCount == 199) && (carryName != whichMedication))
@@ -501,16 +506,17 @@ void Pharmacy::fillPrescription()
 
 	//clearConsole();
 
-	cout << "Please enter the information about the prescription for this drug." << endl
-		<< "What is the date?";
+	cout << "Please enter the information about the prescription for this drug." << endl << endl
+		<< "What is the date? Enter the date in the form MMDDYYYY (without any punctuation or forward-slashes).";
 	cin >> prescriptionDate;
-	cout <<"What is the name of the patient the prescription is for?" << endl;
+	cout << "What is the name of the patient the prescription is for? Enter the name of the patient" << endl
+		<< "in the form FirstLast. Make sure not to include any punctuation." << endl;
 	cin >> patientName;
-	cout << "Enter the length of time in days the presciption is supposed to last: ";
+	cout << endl << endl << "Enter the length of time in days the presciption is supposed to last: ";
 	cin >> prescriptionLength;
-	cout << "Please enter the dose in milligrams the patient is supposed to take: ";
+	cout << endl << endl << "Please enter the dose in milligrams the patient is supposed to take: ";
 	cin >> prescriptionDosage;
-	cout << "Please enter the frequency of this dosage (how many times per day): ";
+	cout << endl << endl << "Please enter the frequency of this dosage (how many times per day): ";
 	cin >> dosageFrequency;
 	
 	//The file containing medication pricing information is opened.
@@ -709,6 +715,22 @@ void Pharmacy::fillPrescription()
 			<< "The cost of this prescription will be " << costEffectiveSolution << "$." << endl;
 		break;
 	}
+
+
+	//_______________________________________________________Print receipt______________________________________________________________________________//
+
+	cout << endl << "The receipt for this transaction is as follows: " << endl << endl;
+	//Print receipt file headers
+	cout << setw(25) << left << "Patient name:" << setw(25) << left << "Prescription date:"
+		<< setw(25) << left << "Medication name:" << setw(25) << left << "Prescription dosage:"
+		<< setw(25) << left << "Prescription length:" << setw(25) << left << "Dosage frequency:" << endl;
+
+	//Print specific prescription information
+	cout << setw(25) << left << patientName << setw(25) << left << prescriptionDate
+		<< setw(25) << left << whichMedication << setw(25) << left << prescriptionDosage
+		<< setw(25) << left << prescriptionLength << setw(25) << left << dosageFrequency << endl;
+
+
 	
 	//_______________________________________________________Update stock_______________________________________________________________________________//
 	
@@ -810,7 +832,7 @@ void Pharmacy::printScriptReceipt()
 	//Error check to make sure the output file has been opened.
 	if (receiptFileOut.fail())
 	{
-		cout << "SOMETHING HAPPENED" << endl;
+		cout << "Error. File containing receipt could not be created." << endl;
 	}
 
 	//Print receipt file headers
@@ -998,92 +1020,103 @@ void Pharmacy::updateStock()
 			}
 		}//end of j for
 
-
-		cout << "Which would you like to edit?" << endl
-			<< "Enter [1] to edit the name of the medication." << endl
-			<< "Enter [2] to edit the dosages of the medication." << endl
-			<< "Enter [3] to edit the prices of the medication." << endl
-			<< "Enter [4] to edit the stock of the medication." << endl;
-
-		cin >> dataToEdit;
-
-
-		switch (dataToEdit)
+		do
 		{
-		case 1:
-			cout << "Enter the change to the medication's name:";
-			cin >> medicationNamesArray[rowToEdit-1];
-			break;
+			cout << "Which would you like to edit?" << endl
+				<< "Enter [1] to edit the name of the medication." << endl
+				<< "Enter [2] to edit the dosages of the medication." << endl
+				<< "Enter [3] to edit the prices of the medication." << endl
+				<< "Enter [4] to edit the stock of the medication." << endl
+				<< "Enter [0] if you would not like to make a change at this time." << endl;
 
-		case 2:
-			
-			do
+			cin >> dataToEdit;
+
+
+			switch (dataToEdit)
 			{
-				cout << "Enter the change to the medication's dosage(s):" << endl
-					<< "Enter [1] to change the smallest dosage: " << medicationDosagesArray[rowToEdit-1][0] << endl
-					<< "Enter [2] to change the middle dosage: " << medicationDosagesArray[rowToEdit-1][1] << endl
-					<< "Enter [3] to change the largest dosage: " << medicationDosagesArray[rowToEdit-1][2] << endl;
-				cin >> whichDosageToEdit;
+			case 1:
+				cout << "Enter the change to the medication's name:";
+				cin >> medicationNamesArray[rowToEdit - 1];
+				break;
 
-				cout << "Enter the change in dosage: ";
-				cin >> medicationDosagesArray[rowToEdit-1][whichDosageToEdit-1];
+			case 2:
 
-				cout << "Would you like to make another change to the medication's dosage data?" << endl
-					<< "Enter [0] to make another change." << endl
-					<< "Enter [1] to finish." << endl;
-				cin >> areYouFinished;
-			} while (!areYouFinished);
+				do
+				{
+					cout << "Enter the change to the medication's dosage(s):" << endl
+						<< "Enter [1] to change the smallest dosage: " << medicationDosagesArray[rowToEdit - 1][0] << endl
+						<< "Enter [2] to change the middle dosage: " << medicationDosagesArray[rowToEdit - 1][1] << endl
+						<< "Enter [3] to change the largest dosage: " << medicationDosagesArray[rowToEdit - 1][2] << endl;
+					cin >> whichDosageToEdit;
 
-			break;
+					cout << "Enter the change in dosage: ";
+					cin >> medicationDosagesArray[rowToEdit - 1][whichDosageToEdit - 1];
 
-		case 3:
-			
-			
-			do
-			{
-				cout << "Enter the change to the medication's prices(s):" << endl
-					<< "Enter [1] to change the smallest dosage's price: " << medicationCostsArray[rowToEdit-1][0] << endl
-					<< "Enter [2] to change the middle dosage's price: " << medicationCostsArray[rowToEdit-1][1] << endl
-					<< "Enter [3] to change the largest dosage's price: " << medicationCostsArray[rowToEdit-1][2] << endl;
-				cin >> whichDosageToEdit;
+					cout << "Would you like to make another change to the medication's dosage data?" << endl
+						<< "Enter [0] to make another change." << endl
+						<< "Enter [1] to finish." << endl;
+					cin >> areYouFinished;
+				} while (!areYouFinished);
 
-				cout << "Enter the change in price: ";
-				cin >> medicationCostsArray[rowToEdit-1][whichDosageToEdit-1];
+				break;
 
-				cout << "Would you like to make another change to the medication's dosage data?" << endl
-					<< "Enter [0] to make another change." << endl
-					<< "Enter [1] to finish." << endl;
-				cin >> areYouFinished;
-			} while (!areYouFinished);
-			break;
+			case 3:
 
-		case 4:
-			
-			
-			do
-			{
-				cout << "Enter the change to the medication's stock:" << endl
-					<< "Enter [1] to change the smallest dosage's price: " << stockArray[rowToEdit-1][0] << endl
-					<< "Enter [2] to change the middle dosage's price: " << stockArray[rowToEdit-1][1] << endl
-					<< "Enter [3] to change the largest dosage's price: " << stockArray[rowToEdit-1][2] << endl;
-				cin >> whichDosageToEdit;
 
-				cout << "Enter the change in stock: ";
-				cin >> stockArray[rowToEdit-1][whichDosageToEdit-1];
+				do
+				{
+					cout << "Enter the change to the medication's prices(s):" << endl
+						<< "Enter [1] to change the smallest dosage's price: " << medicationCostsArray[rowToEdit - 1][0] << endl
+						<< "Enter [2] to change the middle dosage's price: " << medicationCostsArray[rowToEdit - 1][1] << endl
+						<< "Enter [3] to change the largest dosage's price: " << medicationCostsArray[rowToEdit - 1][2] << endl;
+					cin >> whichDosageToEdit;
 
-				cout << "Would you like to make another change to the medication's stock data?" << endl
-					<< "Enter [0] to make another change." << endl
-					<< "Enter [1] to finish." << endl;
-				cin >> areYouFinished;
-			} while (!areYouFinished);
-			break;
-		}
+					cout << "Enter the change in price: ";
+					cin >> medicationCostsArray[rowToEdit - 1][whichDosageToEdit - 1];
 
-		cout << "Would you like to review the medication data again and potentially make another change?" << endl
+					cout << "Would you like to make another change to the medication's dosage data?" << endl
+						<< "Enter [0] to make another change." << endl
+						<< "Enter [1] to finish." << endl;
+					cin >> areYouFinished;
+				} while (!areYouFinished);
+				break;
+
+			case 4:
+
+
+				do
+				{
+					cout << "Enter the change to the medication's stock:" << endl
+						<< "Enter [1] to change the smallest dosage's price: " << stockArray[rowToEdit - 1][0] << endl
+						<< "Enter [2] to change the middle dosage's price: " << stockArray[rowToEdit - 1][1] << endl
+						<< "Enter [3] to change the largest dosage's price: " << stockArray[rowToEdit - 1][2] << endl;
+					cin >> whichDosageToEdit;
+
+					cout << "Enter the change in stock: ";
+					cin >> stockArray[rowToEdit - 1][whichDosageToEdit - 1];
+
+					cout << "Would you like to make another change to the medication's stock data?" << endl
+						<< "Enter [0] to make another change." << endl
+						<< "Enter [1] to finish." << endl;
+					cin >> areYouFinished;
+				} while (!areYouFinished);
+				break;
+
+			default:
+				break;
+			}
+
+			cout << "Would you like to review the medication data again and potentially make another change?" << endl
+				<< "Enter [0] to review medication data again and potentially make another change." << endl
+				<< "Enter [1] if you are finished." << endl;
+			cin >> areYouFinished;
+
+		} while (!areYouFinished);
+
+		cout << "Would you like to review the entirety of the medication data again and potentially make another change?" << endl
 			<< "Enter [0] to review medication data again and potentially make another change." << endl
 			<< "Enter [1] if you are finished." << endl;
 		cin >> areYouFinished;
-
 	}while (!areYouFinished);
 }
 
