@@ -813,7 +813,7 @@ void Pharmacy::fillPrescription()
 
 void Pharmacy::printScriptReceipt()
 {
-	ofstream receiptFileOut;
+	ofstream receiptFileOut, masterReceiptFileOut;
 
 	//The next few lines represent the concatenation of the file name.
 	string receiptFileName = ".\\PharmacyInformation\\Receipts\\";
@@ -846,6 +846,21 @@ void Pharmacy::printScriptReceipt()
 	
 	//Close the newly-created file containing the receipt
 	receiptFileOut.close();
+
+	masterReceiptFileOut.open(".\\PharmacyInformation\\Receipts\\MasterReceipt.dat", std::ios_base::app);
+
+	if (masterReceiptFileOut.fail())
+	{
+		cout << "Error opening master receipt file." << endl;
+	}
+
+	//Print specific prescription information
+	masterReceiptFileOut << setw(25) << left << patientName << setw(25) << left << prescriptionDate
+		<< setw(25) << left << whichMedication << setw(25) << left << prescriptionDosage
+		<< setw(25) << left << prescriptionLength << setw(25) << left << dosageFrequency << endl;
+
+	masterReceiptFileOut.close();
+
 }
 
 void Pharmacy::updateStock()
@@ -1049,7 +1064,7 @@ void Pharmacy::updateStock()
 				//For loop that will overwrite the file containing the medication names using the changed array representing this file.
 				for (int i = 0; i < 200; i++)
 				{
-					namesFileOut << medicationNamesArray[i];
+					namesFileOut << medicationNamesArray[i] << endl;
 				}
 
 				namesFileOut.close();
@@ -1089,6 +1104,11 @@ void Pharmacy::updateStock()
 						{
 							
 							dosagesFileOut << medicationDosagesArray[i][j];
+
+							if (j == 2)
+							{
+								dosagesFileOut << endl;
+							}
 						}
 					}
 
@@ -1138,6 +1158,10 @@ void Pharmacy::updateStock()
 						for (int j = 0; j < 3; j++)
 						{
 							costsFileOut << medicationCostsArray[i][j];
+							if (j == 2)
+							{
+								costsFileOut << endl;
+							}
 						}
 					}
 
@@ -1167,6 +1191,21 @@ void Pharmacy::updateStock()
 
 					cout << "Enter the change in stock: ";
 					cin >> stockArray[rowToEdit - 1][whichDosageToEdit - 1];
+
+					dosagesFileOut.open(".\\PharmacyInformation\\MedicationDosages.dat");
+
+					for (int i = 0; i < 200; i++)
+					{
+						for (int j = 0; j < 3; j++)
+						{
+							dosagesFileOut << medicationDosagesArray[i][j];
+
+							if (j == 0)
+							{
+								dosagesFileOut << endl;
+							}
+						}
+					}
 
 					cout << "Would you like to make another change to the medication's stock data?" << endl
 						<< "Enter [0] to make another change." << endl
@@ -1303,13 +1342,72 @@ void Pharmacy::viewStock()
 
 void Pharmacy::displayReceipts()
 {
-	ifstream receiptsFolder;
+
+	//Variable declarations
+	ifstream masterReceiptFile;
+	string pointlessString;
+
+
+
+	//counting variables
+	int count = 0,
+		indexRowCount = 0,
+		indexColumnCount = 0;
+
+	//Opening the master receipt file
+	masterReceiptFile.open(".\\PharmacyInformation\\Receipts\\MasterReceipt.dat");
 	
-	string fileNames;
+	//If the file containing the master receipt list fails to open, then display an error
+	if (masterReceiptFile.fail())
+	{
+		cout << "Error opening master receipt file." << endl;
+	}
 
-	receiptsFolder.open(".\\PharmacyInformation\\Receipts");
+	//While not at the end of the file, set our counting variable equal to the number of rows in the file.
+	while (!masterReceiptFile.eof())
+	{
+		getline(masterReceiptFile, pointlessString);
+		count++;
+	}
 
-	getline(receiptsFolder, fileNames);
+	for (int i = (count - 50); i > count; i++)
+	{
+		getline(masterReceiptFile, medicationNamesArray[indexRowCount]);
 
-	cout << fileNames << endl;
+		for (indexColumnCount = 0; indexColumnCount < 3; indexColumnCount++)
+		{
+			masterReceiptFile >> medicationCostsArray[i][indexColumnCount];
+			masterReceiptFile >> medicationDosagesArray[i][indexColumnCount];
+			masterReceiptFile >> stockArray[i][indexColumnCount];
+		}
+			indexRowCount++;
+	}
+
+	//Print specific prescription information
+	cout << setw(25) << setfill('_') << left << "Patient Name:" << setw(25) << setfill('_') << left << "Prescription Date:" 
+		<< setw(25) << setfill('_') << left << "Medication Name:" << setw(25) << setfill('_') << left << "Dosages:"
+		<< setw(25) << setfill('_') << left << "Prices:" << setw(25) << setfill('_') << left << "Quantity in stock:" << endl << endl;
+
+	for (int i = 0; i < 50; i++)
+	{
+		cout << setw(25) << setfill('.') << left << medicationNamesArray[i];
+
+		for (int j = 0; j < 3; j++)
+		{
+			if (j != 0)
+			{
+				cout << "               ";
+			}//end of if
+
+			cout << setw(25) << setfill('_') << right << medicationDosagesArray[i][j]
+				<< setw(25) << setfill('_') << right << medicationCostsArray[i][j]
+				<< setw(25) << setfill('_') << right << stockArray[i][j] << endl;
+			if (j == 2)
+			{
+				cout << endl;
+			}
+		}//end of j for
+	}//end of i for
+
+	masterReceiptFile.close();
 }
