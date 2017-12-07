@@ -49,8 +49,12 @@ public:
 		//Postcondition: Administrative permissions are either granted or denied.
 
 	void displayPharmacistOptions();
+		//This function will display the choices onto the console for the pharmacist to choose from. 
+		//the options are: fill prescription, print receipt, update stock, and display reciepts
 
 	void fillPrescription();
+		//Reads prescription file and allows the user to search for a prescription.
+		//Displays the name, price, dose and stock of presciption searched for 
 
 	void printScriptReceipt();
 	void updateStock();
