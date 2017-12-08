@@ -54,10 +54,14 @@ public:
 
 	void fillPrescription();
 		//Reads prescription file and allows the user to search for a prescription.
-		//Displays the name, price, dose and stock of presciption searched for 
+		//Displays the name, price, dose and stock of presciption searched for. 
 
 	void printScriptReceipt();
+		//This function prints a receipt of all the necessary information, including, medication name,
+		//price, dosage, and customer name.
+	
 	void updateStock();
+		//This function updates the stock based on how much dosage and how large the prescription given prior. 
 
 	void viewStock();
 		//This function will allow the user to access the file containing the information on 
@@ -65,32 +69,35 @@ public:
 		//Postcondition: User is now able to manipulate the sequential data file "Stock.dat".
 
 	void displayReceipts();
+		//This function either creates or opens a file containing the last 50 receipts since the
+		//user has logged in.  If opening the file the function appends the exsisting file adding onto the 
+		//end of it. 
 
-
+	// The following four functions allow the user to reset the files back to their default values. 
 	void resetStock();
 	void resetMedicationNames();
 	void resetMedicationCosts();
 	void resetMedicationDosages();
 
-
-	string username;
-	int IDnumber;
-	string password;
+	
+	string username; //The username of the individual pharmicist to access the program
+	int IDnumber; //The individual IDnumber of the individual pharmicist to access the program
+	string password; //The universal password required by the pharmicist to access the program
 
 private:
 	int pharmacistDecision; //used to allow the pharmacist to make a decision
-	int continueOrNot; 
+	int continueOrNot;   //used to ask the user whether or not they wish to continue 
 	string whichMedication; //Which medication the pharmacist has chosen
 	int medicationRow;
 	double whichDosage;
 
 	
 	//These three variables store the inputs of the pharmacist that are used to calculate the most cost effective way for the pharmacist to fill the prescription.
-	string prescriptionDate;
-	string patientName;
+	string prescriptionDate; //Variable represents the date the prescription was filled
+	string patientName;	//Variable represents the patients name being entered
 	int prescriptionLength; //Variable represents the length of time the prescription will last
-	int prescriptionDosage;
-	int dosageFrequency;
+	int prescriptionDosage; //Variable represents the dosage of the prescription
+	int dosageFrequency; //Variable represents how often the prescription needs to be taken
 	
 
 	int amountOfPillsToMakeUpScript; //Variable used to combine the three above variables; this will make it easier to create algorithms; working with one variable instead of three.
