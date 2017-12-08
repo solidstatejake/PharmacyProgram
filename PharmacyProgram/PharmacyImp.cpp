@@ -36,18 +36,21 @@ void Pharmacy::resetMedicationNames()
 {
 	ofstream namesFileOut;
 
-	namesFileOut.open(".\\PharmacyInformation\\MedicationNames.dat");
+	namesFileOut.open(".\\PharmacyInformation\\MedicationNames.dat"); //Opens file with medication names
 
+	//If the file fails to open an error is prompted
 	if (namesFileOut.fail())
 	{
 		cout << "Error opening names file in order to reset data inside." << endl;
 	}
 
+	//Resets the medication names to default
 	for (int i = 1; i <= 200; i++)
 	{
 		namesFileOut << "MEDICATION" << i << endl; 
 	}
-
+	
+	//Close the file
 	namesFileOut.close();
 }
 
@@ -59,7 +62,7 @@ void Pharmacy::resetStock()
 	//Open the stock file
 	stockFileOut.open(".\\PharmacyInformation\\MedicationStock.dat");
 
-
+	//Displays an error if the file fails to open
 	if (stockFileOut.fail())
 	{
 		cout << "Error opening stock file in order to reset data inside." << endl;
@@ -90,7 +93,7 @@ void Pharmacy::resetMedicationDosages()
 	//Open the stock file
 	dosageFileOut.open(".\\PharmacyInformation\\MedicationDosages.dat");
 
-
+	//Displays an error if the file fails to open
 	if (dosageFileOut.fail())
 	{
 		cout << "Error opening dosages file in order to reset data inside." << endl;
@@ -148,7 +151,7 @@ void Pharmacy::resetMedicationCosts()
 	//Open the stock file
 	costsFileOut.open(".\\PharmacyInformation\\MedicationCosts.dat");
 
-
+	//Displays an error if the file fails to open
 	if (costsFileOut.fail())
 	{
 		cout << "Error opening costs file in order to reset data inside." << endl;
@@ -200,6 +203,14 @@ void Pharmacy::resetMedicationCosts()
 void Pharmacy::introToUser() const
 {
 	cout << "PharmaTech Version 1.0" << endl;
+	cout << endl << endl << endl;
+	cout << "Welcome to PharmaTech Version 1.0" << endl << endl;
+	cout << "After logging in with your Username, ID, and password you will be able to access " << endl;
+	cout << "all of the prescription information necessary to fill a prescription." << endl;
+	cout << endl << endl;
+	cout << "You will also have access to the stock of medications, and a history of receipts for past" << endl;
+	cout << "prescriptions filled." << endl;
+	
 
 	//write some more shit that explains to a pharmacist how to fill a prescription.
 }
