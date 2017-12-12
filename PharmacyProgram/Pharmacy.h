@@ -75,25 +75,40 @@ public:
 		//Postcondition: All edits made by the user to the medication data (i.e. medication name, medication dosages, medication costs... etc.)	
 		//are edited in the file(s) which contain the information they are editing.
 
+	void fillPrescription();
+		//Reads prescription file and allows the user to search for a prescription.
+		//Displays the name, price, dose and stock of presciption searched for. 
+
+	void printScriptReceipt();
+		//This function prints a receipt of all the necessary information, including, medication name,
+		//price, dosage, and customer name.
+	
+	void updateStock();
+		//This function updates the stock based on how much dosage and how large the prescription given prior. 
+
+
 	void viewStock();
 		//This function will allow the user to access the file containing the information on 
 		//the status of the medications in stock.
 		//Postcondition: User is now able to manipulate the sequential data file "Stock.dat".
 
 	void displayReceipts();
-		//NOT FINISHED!~~~~~!!!~~~~~!!!! This function allows the user to print copies of all receipts in the file "Receipts".
-
-
 	//These four functions are only for demonstrative purposes. These four functions reset each of their respective data (i.e. stock, names,
 	//costs, and dosages) to preset values inside of the files where these data can be found.
 	//Postcondition: Stock() changes all medications (including all three of every dosage type) stock value to 1000.
 	//				 MedicationNames() changes all 200 medication names to "MEDICATIONn" where n represent a number 1-200.
 	//				 MedicationCosts() changes all costs to preset, arbitrary values.
 	//				 MedicationDosages() changes all medication dosages to preset, arbitrary values.
+	//This function either creates or opens a file containing the last 50 receipts since the
+	//user has logged in.  If opening the file the function appends the exsisting file adding onto the 
+	//end of it. 
+
+  //These functions reset the data that lies in the files containing medication stock, name, costs, dosages.
 	void resetStock();
 	void resetMedicationNames();
 	void resetMedicationCosts();
 	void resetMedicationDosages();
+
 
 	//This variable is used to store the user's username that they input in the beginning of the program to log in.
 	string username;
@@ -106,7 +121,7 @@ public:
 
 private:
 	int pharmacistDecision; //used to allow the pharmacist to make a decision
-	int continueOrNot; 
+	int continueOrNot;   //used to ask the user whether or not they wish to continue 
 	string whichMedication; //Which medication the pharmacist has chosen
 
 	//This variable is used when the user inputs a medication name. It holds the row the medication was found on. This row number is then used to
@@ -119,7 +134,6 @@ private:
 	int prescriptionLength; //Variable represents the length of time the prescription in question will last
 	int prescriptionDosage; //Variable represents the dosage associated with the prescription in question.
 	int dosageFrequency;	//Variable represents the frequency the prescription's dosage should be taken.
-	
 
 	int amountOfPillsToMakeUpScript; //Variable used to combine the three above variables; this will make it easier to create algorithms; working with one variable instead of three.
 	double costEffectiveSolution;	 //Variable that holds the cost of the prescription.
